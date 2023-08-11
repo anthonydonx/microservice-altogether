@@ -1,0 +1,22 @@
+eureka:
+    client:
+        fetchRegistry: false
+        healthcheck:
+            enabled: true
+        registerWithEureka: false
+    instance:
+        hostname: localhost
+        lease-expiration-duration-in-seconds: 30
+        lease-renewal-interval-in-seconds: 30
+        prefer-ip-address: true
+    server:
+        enableSelfPreservation: false
+        eviction-interval-timer-in-ms: 20000
+        expected-client-renewal-interval-seconds: 30
+        renewal-percent-threshold: 0.85
+        renewal-threshold-update-interval-ms: 900000
+server:
+    port: 8761
+spring:
+    application:
+        name: localhost
