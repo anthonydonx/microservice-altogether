@@ -1,0 +1,29 @@
+eureka:
+    instance:
+        client:
+            serviceUrl:
+                defaultZone: http://localhost:8761/eureka/
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+server:
+    port: 9191
+spring:
+    application:
+        name: API-GATEWAY
+    cloud:
+        gateway:
+            routes:
+            -   id: BOOK-SERVICE
+                predicates:
+                - Path=/book/**
+                uri: lb://BOOK-SERVICE
+            -   id: AUTHOR-SERVICE
+                predicates:
+                - Path=/author/**
+                uri: lb://AUTHOR-SERVICE
+        config:
+            import-check:
+                enabled: false
