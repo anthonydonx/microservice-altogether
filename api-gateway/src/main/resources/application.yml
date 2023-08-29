@@ -1,15 +1,5 @@
-eureka:
-    instance:
-        client:
-            serviceUrl:
-                defaultZone: http://localhost:8761/eureka/
-management:
-    endpoints:
-        web:
-            exposure:
-                include: '*'
 server:
-    port: 9191
+    port: 8080
 spring:
     application:
         name: API-GATEWAY
@@ -27,3 +17,32 @@ spring:
         config:
             import-check:
                 enabled: false
+
+logging:
+    level:
+        org.springframework.cloud.gateway: DEBUG
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://192.168.32.1:8761/eureka
+        registerWithEureka: true
+        fetchRegistry: true
+    instance:
+        leaseRenewalIntervalInSeconds: 30
+        preferIpAddress: true
+        leaseExpirationDurationInSeconds: 30
+management:
+    tracing:
+        enabled: true
+        sampler:
+            probability: 1.0
+    endpoint:
+        info:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+    info:
+        env:
+            enabled: true

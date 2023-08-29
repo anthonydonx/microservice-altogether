@@ -1,0 +1,71 @@
+version: '3.2'
+
+services:
+    gateway:
+        build:
+            context: ./api-gateway
+        ports:
+            - "8080:8080"
+        depends_on:
+            - config-server
+            - service-discovery
+    
+    author-service:
+        build:
+            context: ./author-service
+        ports:
+            - "8070:8070"
+        depends_on:
+            - service-discovery
+            - zipkin
+            - config-server
+            - gateway
+        networks:
+            - rabbitmq_go_net
+    
+    book-service:
+        build:
+            context: ./book-service
+        ports:
+            - "8071:8071"
+        depends_on:
+            - service-discovery
+            - zipkin
+            - config-server
+            - gateway
+        networks:
+            - rabbitmq_go_net
+    
+    config-server:
+        build:
+            context: ./config-server
+        ports:
+            - "8088:8088"
+    
+    service-discovery:
+        build:
+            context: ./service-discovery
+        ports:
+            - "8761:8761"
+    zipkin:
+        image: openzipkin/zipkin
+        ports:
+            - "9411:9411"
+        networks:
+            - rabbitmq_go_net
+
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        container_name: 'rabbitmq'
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        volumes:
+            - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+            - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+        networks:
+            - rabbitmq_go_net
+
+networks:
+    rabbitmq_go_net:
+        driver: bridge

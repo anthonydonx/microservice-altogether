@@ -3,11 +3,12 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://192.168.32.1:8761/eureka
     should-unregister-on-shutdown: true
   instance:
     lease-renewal-interval-in-seconds: 30
     preferIpAddress: true
+
 info:
   app:
     version: '@project.version@'
@@ -27,14 +28,28 @@ management:
     env:
       enabled: true
 server:
-  port: 9081
+  port: 8071
+
+
+
 spring:
+  rabbitmq:
+    addresses: 192.168.32.1:5672
+  cloud:
+    stream:
+      bindings:
+        bookConsumer-in-0:
+          destination: bookConsumer-in-topic
+          group: bookConsumer-group
+        bookSupplier-out-0:
+          destination: bookSupplier-out-topic
+
   application:
     name: book-service
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
   zipkin:
-    base-url: http://localhost:9411
+    base-url: http://192.168.32.1:9411
   micrometer:
-    enabled: true
+    enabled: false
